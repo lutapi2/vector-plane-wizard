@@ -2,6 +2,7 @@ import { useState } from "react";
 import { VectorInput, Vector } from "@/components/VectorInput";
 import { VectorOperations } from "@/components/VectorOperations";
 import { Vector3DCanvas } from "@/components/Vector3DCanvas";
+import { VectorApplications } from "@/components/VectorApplications";
 import { Calculator } from "lucide-react";
 
 const Index = () => {
@@ -47,7 +48,7 @@ const Index = () => {
 
       {/* Main Content */}
       <main className="container mx-auto px-4 py-6">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-[calc(100vh-140px)]">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 min-h-[calc(100vh-140px)]">
           {/* Left Panel - Controls */}
           <div className="lg:col-span-1 space-y-4 overflow-y-auto pr-2">
             <VectorInput vectors={vectors} onVectorsChange={setVectors} />
@@ -60,6 +61,9 @@ const Index = () => {
           </div>
         </div>
       </main>
+
+      {/* Applications Section */}
+      <VectorApplications />
     </div>
   );
 };
