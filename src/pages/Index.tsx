@@ -3,6 +3,7 @@ import { VectorInput, Vector } from "@/components/VectorInput";
 import { VectorOperations } from "@/components/VectorOperations";
 import { Vector3DCanvas } from "@/components/Vector3DCanvas";
 import { VectorApplications } from "@/components/VectorApplications";
+import { ProblemSolver } from "@/components/ProblemSolver";
 import { Calculator } from "lucide-react";
 
 const Index = () => {
@@ -61,6 +62,9 @@ const Index = () => {
           </div>
         </div>
       </main>
+
+      {/* Problem Solver Section */}
+      <ProblemSolver />
 
       {/* Applications Section */}
       <VectorApplications />
