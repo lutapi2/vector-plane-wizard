@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Lightbulb, Box, Zap, Cog } from "lucide-react";
+import { useSaveCalculation } from "@/hooks/useSaveCalculation";
 
 interface Vector3D {
   x: number;
@@ -13,6 +14,8 @@ interface Vector3D {
 }
 
 export const ProblemSolver = () => {
+  const { saveCalculation } = useSaveCalculation();
+
   // Tensión en cables - 3 vectores
   const [cables, setCables] = useState<Vector3D[]>([
     { x: 30, y: 40, z: 50 },
@@ -72,11 +75,14 @@ export const ProblemSolver = () => {
     const magnitudes = cables.map(c => calculateMagnitude(c));
     const magResultante = calculateMagnitude(resultante);
 
-    setCableResult({
+    const result = {
       resultante,
       magnitudes,
       magResultante
-    });
+    };
+
+    setCableResult(result);
+    saveCalculation("cable_tension", { cables }, result);
   };
 
   const solveStructure = () => {
@@ -85,12 +91,15 @@ export const ProblemSolver = () => {
     const mag1 = calculateMagnitude(structVectors[0]);
     const mag2 = calculateMagnitude(structVectors[1]);
 
-    setStructResult({
+    const result = {
       cross,
       magCross,
       mag1,
       mag2
-    });
+    };
+
+    setStructResult(result);
+    saveCalculation("structure_analysis", { vectors: structVectors }, result);
   };
 
   const solveField = () => {
@@ -101,10 +110,13 @@ export const ProblemSolver = () => {
       z: fieldVector.z / magnitude
     };
 
-    setFieldResult({
+    const result = {
       magnitude,
       normalized
-    });
+    };
+
+    setFieldResult(result);
+    saveCalculation("field_analysis", { fieldVector }, result);
   };
 
   const solveRobot = () => {
@@ -118,12 +130,15 @@ export const ProblemSolver = () => {
       return sum;
     }, 0);
 
-    setRobotResult({
+    const result = {
       finalPosition,
       totalDistance,
       displacement,
       work
-    });
+    };
+
+    setRobotResult(result);
+    saveCalculation("robot_trajectory", { vectors: robotVectors }, result);
   };
 
   return (
