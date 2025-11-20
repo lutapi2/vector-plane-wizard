@@ -23,6 +23,51 @@ export const VectorOperations = ({ vectors }: VectorOperationsProps) => {
     );
   };
 
+  const calculateDifference = (v1: Vector, v2: Vector) => {
+    return {
+      x: v1.x - v2.x,
+      y: v1.y - v2.y,
+      z: v1.z - v2.z,
+    };
+  };
+
+  const normalizeVector = (v: Vector) => {
+    const mag = calculateMagnitude(v);
+    if (mag === 0) return { x: 0, y: 0, z: 0 };
+    return {
+      x: v.x / mag,
+      y: v.y / mag,
+      z: v.z / mag,
+    };
+  };
+
+  const calculateAngleBetween = (v1: Vector, v2: Vector) => {
+    const dot = calculateDotProduct(v1, v2);
+    const mag1 = calculateMagnitude(v1);
+    const mag2 = calculateMagnitude(v2);
+    if (mag1 === 0 || mag2 === 0) return { radians: 0, degrees: 0, cosTheta: 0 };
+    const cosTheta = dot / (mag1 * mag2);
+    const angleRad = Math.acos(Math.max(-1, Math.min(1, cosTheta)));
+    const angleDeg = (angleRad * 180) / Math.PI;
+    return { radians: angleRad, degrees: angleDeg, cosTheta };
+  };
+
+  const projectVector = (v1: Vector, v2: Vector) => {
+    const dot = calculateDotProduct(v1, v2);
+    const mag2Squared = v2.x * v2.x + v2.y * v2.y + v2.z * v2.z;
+    if (mag2Squared === 0) return { scalar: 0, vector: { x: 0, y: 0, z: 0 } };
+    const scalar = dot / Math.sqrt(mag2Squared);
+    const factor = dot / mag2Squared;
+    return {
+      scalar,
+      vector: {
+        x: factor * v2.x,
+        y: factor * v2.y,
+        z: factor * v2.z,
+      },
+    };
+  };
+
   const calculateDotProduct = (v1: Vector, v2: Vector) => {
     return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
   };
@@ -98,6 +143,103 @@ export const VectorOperations = ({ vectors }: VectorOperationsProps) => {
 
           {vectors.length >= 2 && (
             <>
+              <Separator className="bg-border" />
+              <div>
+                <h4 className="text-sm font-medium mb-2 text-accent">
+                  Resta de Vectores ({vectors[0].name} - {vectors[1].name})
+                </h4>
+                {(() => {
+                  const diff = calculateDifference(vectors[0], vectors[1]);
+                  return (
+                    <div className="space-y-1 text-xs text-muted-foreground font-mono">
+                      <div>x: {vectors[0].x} - ({vectors[1].x}) = {diff.x.toFixed(2)}</div>
+                      <div>y: {vectors[0].y} - ({vectors[1].y}) = {diff.y.toFixed(2)}</div>
+                      <div>z: {vectors[0].z} - ({vectors[1].z}) = {diff.z.toFixed(2)}</div>
+                      <div className="text-foreground font-semibold pt-1">
+                        Resultado: ({diff.x.toFixed(2)}, {diff.y.toFixed(2)}, {diff.z.toFixed(2)})
+                      </div>
+                      <div className="text-muted-foreground">
+                        Magnitud: {calculateMagnitude(diff as any).toFixed(3)}
+                      </div>
+                    </div>
+                  );
+                })()}
+              </div>
+
+              <Separator className="bg-border" />
+              <div>
+                <h4 className="text-sm font-medium mb-2 text-accent">Vectores Normalizados</h4>
+                <div className="space-y-3">
+                  {vectors.slice(0, 2).map((v) => {
+                    const normalized = normalizeVector(v);
+                    return (
+                      <div key={v.id} className="space-y-1">
+                        <div className="flex items-center gap-2 text-sm">
+                          <div
+                            className="w-3 h-3 rounded-full"
+                            style={{ backgroundColor: v.color }}
+                          />
+                          <span className="font-medium text-foreground">{v.name} normalizado</span>
+                        </div>
+                        <div className="pl-5 space-y-0.5 text-xs text-muted-foreground font-mono">
+                          <div>{v.name}̂ = {v.name} / |{v.name}|</div>
+                          <div className="text-foreground font-semibold">
+                            ({normalized.x.toFixed(3)}, {normalized.y.toFixed(3)}, {normalized.z.toFixed(3)})
+                          </div>
+                          <div className="text-muted-foreground">
+                            Magnitud: {calculateMagnitude(normalized as any).toFixed(3)}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <Separator className="bg-border" />
+              <div>
+                <h4 className="text-sm font-medium mb-2 text-accent">
+                  Ángulo entre {vectors[0].name} y {vectors[1].name}
+                </h4>
+                {(() => {
+                  const angle = calculateAngleBetween(vectors[0], vectors[1]);
+                  return (
+                    <div className="space-y-1 text-xs text-muted-foreground font-mono">
+                      <div>cos(θ) = ({vectors[0].name} · {vectors[1].name}) / (|{vectors[0].name}| × |{vectors[1].name}|)</div>
+                      <div>cos(θ) = {angle.cosTheta.toFixed(4)}</div>
+                      <div className="text-foreground font-semibold pt-1">
+                        θ = {angle.degrees.toFixed(2)}° ({angle.radians.toFixed(4)} rad)
+                      </div>
+                    </div>
+                  );
+                })()}
+              </div>
+
+              <Separator className="bg-border" />
+              <div>
+                <h4 className="text-sm font-medium mb-2 text-accent">
+                  Proyección de {vectors[0].name} sobre {vectors[1].name}
+                </h4>
+                {(() => {
+                  const proj = projectVector(vectors[0], vectors[1]);
+                  return (
+                    <div className="space-y-1 text-xs text-muted-foreground font-mono">
+                      <div>Proyección escalar = ({vectors[0].name} · {vectors[1].name}) / |{vectors[1].name}|</div>
+                      <div className="text-foreground font-semibold">
+                        Escalar: {proj.scalar.toFixed(3)}
+                      </div>
+                      <div className="pt-1">Proyección vectorial = (({vectors[0].name} · {vectors[1].name}) / |{vectors[1].name}|²) × {vectors[1].name}</div>
+                      <div className="text-foreground font-semibold">
+                        Vector: ({proj.vector.x.toFixed(3)}, {proj.vector.y.toFixed(3)}, {proj.vector.z.toFixed(3)})
+                      </div>
+                      <div className="text-muted-foreground">
+                        Magnitud: {calculateMagnitude(proj.vector as any).toFixed(3)}
+                      </div>
+                    </div>
+                  );
+                })()}
+              </div>
+
               <Separator className="bg-border" />
               <div>
                 <h4 className="text-sm font-medium mb-2 text-accent">
