@@ -213,7 +213,7 @@ export const Vector3DCanvas = ({ vectors, extraVectors = [] }: Vector3DCanvasPro
       </Canvas>
 
       {/* Floating controls */}
-      <div className="absolute top-3 right-3 flex gap-2">
+      <div className="absolute top-3 right-3 z-30 flex gap-2">
         <Popover>
           <PopoverTrigger asChild>
             <Button variant="secondary" size="icon" aria-label="Ajustes de la escena" className="shadow-md">
