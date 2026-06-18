@@ -34,7 +34,7 @@ export const CanvasGuide = ({ vectors }: CanvasGuideProps) => {
 
       {/* Vector list - top right */}
       {vectors.length > 0 && (
-        <div className="absolute top-3 right-3 z-10 bg-card/80 backdrop-blur-sm border border-border rounded-lg p-3 shadow-lg max-w-[200px] animate-fade-in">
+        <div className="absolute top-[3.75rem] right-3 z-10 bg-card/80 backdrop-blur-sm border border-border rounded-lg p-3 shadow-lg max-w-[200px] animate-fade-in">
           <div className="text-xs font-semibold text-muted-foreground mb-2">
             Vectores activos ({vectors.length})
           </div>

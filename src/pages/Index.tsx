@@ -7,6 +7,7 @@ import { VectorApplications } from "@/components/VectorApplications";
 import { CalculationHistory } from "@/components/CalculationHistory";
 import { CanvasGuide } from "@/components/CanvasGuide";
 import { WelcomeBanner } from "@/components/WelcomeBanner";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { Calculator, LogOut } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
@@ -35,40 +36,43 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted">
-      <header className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-20 shadow-[var(--shadow-card)]">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-gradient-to-br from-primary to-accent">
-                <Calculator className="w-6 h-6 text-primary-foreground" />
+      <header className="border-b border-border bg-card/70 backdrop-blur-sm sticky top-0 z-20 shadow-[var(--shadow-card)]">
+        <div className="container mx-auto px-4 py-3 sm:py-4">
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-3 min-w-0">
+              <div className="p-2 rounded-lg bg-gradient-to-br from-primary to-accent shrink-0">
+                <Calculator className="w-5 h-5 sm:w-6 sm:h-6 text-primary-foreground" />
               </div>
-              <div>
-                <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                  Calculadora de Vectores 3D
+              <div className="min-w-0">
+                <h1 className="text-lg sm:text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent truncate">
+                  VectorLab — Análisis Vectorial 3D
                 </h1>
-                <p className="text-sm text-muted-foreground">
-                  Visualiza y opera con vectores en el espacio tridimensional
+                <p className="hidden sm:block text-sm text-muted-foreground">
+                  Plataforma educativa de álgebra vectorial y visualización tridimensional
                 </p>
               </div>
             </div>
-            <Button variant="outline" onClick={signOut} className="flex items-center gap-2">
-              <LogOut className="w-4 h-4" />
-              Cerrar Sesión
-            </Button>
+            <div className="flex items-center gap-2 shrink-0">
+              <ThemeToggle />
+              <Button variant="outline" onClick={signOut} className="flex items-center gap-2" aria-label="Cerrar sesión">
+                <LogOut className="w-4 h-4" />
+                <span className="hidden sm:inline">Cerrar Sesión</span>
+              </Button>
+            </div>
           </div>
         </div>
       </header>
 
       <main className="container mx-auto px-4 py-6">
         <WelcomeBanner />
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 min-h-[calc(100vh-200px)]">
-          <div className="lg:col-span-1 space-y-4 overflow-y-auto pr-2">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-1 space-y-4 order-2 lg:order-1">
             <VectorInput vectors={vectors} onVectorsChange={setVectors} />
             <VectorOperations vectors={vectors} />
             <CalculationHistory />
           </div>
 
-          <div className="lg:col-span-2 relative rounded-lg overflow-hidden border border-border shadow-[var(--shadow-glow)] min-h-[500px]">
+          <div className="lg:col-span-2 order-1 lg:order-2 relative rounded-lg overflow-hidden border border-border shadow-[var(--shadow-glow)] h-[420px] sm:h-[520px] lg:h-[calc(100vh-180px)] lg:sticky lg:top-24">
             <Vector3DCanvas vectors={vectors} />
             <CanvasGuide vectors={vectors} />
           </div>
