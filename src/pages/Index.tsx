@@ -7,6 +7,7 @@ import { VectorApplications } from "@/components/VectorApplications";
 import { CalculationHistory } from "@/components/CalculationHistory";
 import { CanvasGuide } from "@/components/CanvasGuide";
 import { WelcomeBanner } from "@/components/WelcomeBanner";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { Calculator, LogOut } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
